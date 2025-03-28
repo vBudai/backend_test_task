@@ -8,7 +8,7 @@ RUN apk add --no-cache postgresql-dev \
 ENV COMPOSER_CACHE_DIR=/tmp/composer-cache
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# COPY php.ini
+# Copy php.ini
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # Setup php app user
@@ -18,6 +18,11 @@ USER app
 
 COPY --chown=app ../.. /app
 WORKDIR /app
+
+# Change rights for cache folders
+RUN mkdir -p var/cache var/log \
+    && chown -R app:app var \
+    && chmod -R 777 var
 
 EXPOSE 8337
 
