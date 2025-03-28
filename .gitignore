@@ -11,3 +11,4 @@ compose.override.yaml
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+/.env
