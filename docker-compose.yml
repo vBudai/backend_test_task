@@ -11,6 +11,10 @@ services:
             - .:/app:rw
         environment:
             - APP_ENV=dev
+        depends_on:
+            -   mysql
+        networks:
+            - app-network
 
     mysql:
         container_name: 'app-mysql'
