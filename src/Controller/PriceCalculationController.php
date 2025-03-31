@@ -29,7 +29,7 @@ final class PriceCalculationController extends AbstractController
         try{
             $response = new PriceCalculationResponse($this->model->calculatePrice($request));
         } catch (InvalidCouponException | InvalidTaxNumberException $e) {
-            $response = new ErrorResponse(Response::HTTP_BAD_REQUEST, $e->getMessage());
+            $response = new ErrorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $e->getMessage());
         } catch (Exception $e) {
             $response = new ErrorResponse(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }

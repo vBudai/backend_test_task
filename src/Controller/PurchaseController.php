@@ -3,8 +3,12 @@
 namespace App\Controller;
 
 use App\DTO\Request\PurchaseRequest;
+use App\DTO\Response\ErrorResponse;
+use App\DTO\Response\SuccessResponse;
 use App\Exception\InvalidCouponException;
+use App\Exception\InvalidPaymentProcessor;
 use App\Exception\InvalidTaxNumberException;
+use App\Exception\PaymentProcessingException;
 use App\Model\PurchaseModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,24 +29,23 @@ final class PurchaseController extends AbstractController
     {
         try{
             $this->model->purchase($request);
-            return $this->json([
-                'code' => Response::HTTP_OK,
-                'message' => 'Purchase has been handled successfully'
-            ], Response::HTTP_OK);
-        } catch (InvalidCouponException | InvalidTaxNumberException  $e) {
-            return $this->json([
-                'code' => Response::HTTP_BAD_REQUEST,
-                'error' => [
-                    'message' => $e->getMessage()
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        } catch (\Exception $e) {
-            return $this->json([
-                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => [
-                    'message' => $e->getMessage()
-                ]
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response = new SuccessResponse(
+                Response::HTTP_OK,
+                'Purchase has been handled successfully'
+            );
+        } catch (InvalidCouponException | InvalidTaxNumberException | PaymentProcessingException | InvalidPaymentProcessor $e) {
+            $response = new ErrorResponse(
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+                $e->getMessage()
+            );
         }
+        catch (\Exception $e) {
+            $response = new ErrorResponse(
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                $e->getMessage()
+            );
+        }
+
+        return $this->json($response, $response->code);
     }
 }
