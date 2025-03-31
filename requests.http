@@ -1,4 +1,4 @@
-### Calculate Price
+### Calculate Price with coupon - Successful
 POST http://127.0.0.1:8337/calculate-price
 Accept: application/json
 Content-Type: application/json
@@ -9,7 +9,68 @@ Content-Type: application/json
   "couponCode": "D15"
 }
 
-### Execute Purchase
+### Calculate Price without coupon - Successful
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "IT12345678900"
+}
+
+### Calculate Price - Validation Error (invalid tax number)
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "INVALID123",
+  "couponCode": "D15"
+}
+
+### Calculate Price - Validation Error (invalid Coupon)
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "DE123456789",
+  "couponCode": "INVALID"
+}
+
+### Calculate Price - Validation Error (invalid product)
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": "INVALID",
+  "taxNumber": "DE123456789",
+  "couponCode": "D15"
+}
+
+### Calculate Price - Validation Error (missing taxNumber and invalid product)
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": "INVALID"
+}
+
+### Calculate Price - Validation Error (missing product)
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "taxNumber": "DE123456789"
+}
+
+### Execute Paypal purchase with coupon - Success
 POST http://127.0.0.1:8337/purchase
 Accept: application/json
 Content-Type: application/json
@@ -17,6 +78,49 @@ Content-Type: application/json
 {
   "product": 1,
   "taxNumber": "IT12345678900",
-  "couponCode": "D15",
+  "coupon": "D15",
   "paymentProcessor": "paypal"
+}
+
+### Execute Paypal purchase without coupon - Success
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "IT12345678900",
+  "paymentProcessor": "paypal"
+}
+
+### Execute Stripe purchase without coupon - Successful
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "FRAB123456789",
+  "paymentProcessor": "stripe"
+}
+
+### Execute Purchase - Validation Error (missing paymentProcessor)
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "DE123456789"
+}
+
+### Execute Purchase - Validation Error (invalid paymentProcessor)
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "DE123456789",
+  "paymentProcessor": "INVALID"
 }
