@@ -23,7 +23,7 @@ PHONY: help
 help: ## This help.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-init: down build install up wait-for-db db-migrate success-message console ## Initialize environment
+init: down build install up wait-for-db db-migrate db-fixtures success-message console ## Initialize environment
 
 init-prod: ## Initialize production environment
 	@$(MAKE) init ENV=prod
@@ -67,3 +67,8 @@ db-migrate: ## Run database migrations
 	@echo "Applying database migrations..."
 	${DC_EXEC} php bin/console doctrine:migrations:migrate --no-interaction
 	@echo "Migrations completed successfully"
+
+db-fixtures: ## Load fixtures into database
+	@echo "Loading fixtures..."
+	${DC_EXEC} php bin/console doctrine:fixtures:load --no-interaction
+	@echo "Fixtures loaded successfully"
