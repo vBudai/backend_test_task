@@ -12,7 +12,7 @@ use Systemeio\TestForCandidates\PaymentProcessor\StripePaymentProcessor;
 class PaymentProcessorFactory
 {
     /**
-     * @throws \Exception
+     * @throws InvalidPaymentProcessor
      */
     public static function create(string $paymentProcessor): PaymentAdapterInterface
     {

@@ -4,7 +4,9 @@ namespace App\Model;
 
 use App\DTO\Request\PurchaseRequest;
 use App\Exception\InvalidCouponException;
+use App\Exception\InvalidPaymentProcessor;
 use App\Exception\InvalidTaxNumberException;
+use App\Exception\PaymentProcessingException;
 use App\Service\Payment\PaymentProcessorFactory;
 use App\Service\Price\PriceCalculator;
 use Exception;
@@ -18,7 +20,7 @@ class PurchaseModel
     /**
      * @throws InvalidCouponException
      * @throws InvalidTaxNumberException
-     * @throws Exception
+     * @throws PaymentProcessingException|InvalidPaymentProcessor
      */
     public function purchase(PurchaseRequest $request): void
     {

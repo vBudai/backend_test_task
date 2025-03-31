@@ -2,6 +2,7 @@
 
 namespace App\Service\Payment\Adapter;
 
+use App\Exception\PaymentProcessingException;
 use Systemeio\TestForCandidates\PaymentProcessor\PaypalPaymentProcessor;
 
 class PaypalPaymentAdapter implements PaymentAdapterInterface
@@ -12,10 +13,14 @@ class PaypalPaymentAdapter implements PaymentAdapterInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws PaymentProcessingException
      */
     public function pay(float $price): void
     {
-        $this->paymentProcessor->pay($price);
+        try{
+            $this->paymentProcessor->pay($price);
+        } catch (\Exception $e) {
+            throw new PaymentProcessingException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }
