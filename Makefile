@@ -5,7 +5,7 @@ ENV ?= dev
 
 # Load chosen env file
 ifeq ($(ENV),prod)
-	ENV_FILE=.env.prod
+	ENV_FILE=.env
 else
 	ENV_FILE=.env.dev
 endif
